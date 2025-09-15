@@ -1,46 +1,313 @@
 <!doctype html>
 <html lang="fr">
+
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>QuizAppV3 — Développement informatique</title>
   <style>
-    :root{--bg:#0f1724;--card:#0b1330;--accent:#6ee7b7;--muted:#94a3b8}
-    *{box-sizing:border-box}
-    body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue',Arial;color:#e6eef8;background:linear-gradient(180deg,#071028 0%,#071426 60%);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px}
-    .wrap{width:100%;max-width:900px}
-    header{display:flex;align-items:center;gap:14px;margin-bottom:18px}
-    .logo{width:64px;height:64px;border-radius:12px;background:linear-gradient(135deg,var(--accent),#60a5fa);display:flex;align-items:center;justify-content:center;color:#012;a font-weight:800;box-shadow:0 6px 30px rgba(0,0,0,.5)}
-    h1{margin:0;font-size:20px}
-    p.lead{margin:0;color:var(--muted);font-size:13px}
+    :root {
+      --bg: #0f1724;
+      --card: #0b1330;
+      --accent: #6ee7b7;
+      --accent-alt: #60a5fa;
+      --muted: #94a3b8;
+      --text: #e6eef8;
+    }
 
-    .card{background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));padding:22px;border-radius:14px;box-shadow:0 10px 40px rgba(2,6,23,.6);border:1px solid rgba(255,255,255,.03)}
+    * {
+      box-sizing: border-box;
+    }
 
-    .question-meta{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
-    .progress{height:10px;background:rgba(255,255,255,.03);border-radius:999px;overflow:hidden;flex:1;margin-left:12px}
-    .progress > i{display:block;height:100%;background:linear-gradient(90deg,var(--accent),#60a5fa);width:0%}
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+      color: var(--text);
+      background: linear-gradient(180deg, #071028 0%, #071426 60%);
+      background-size: 200% 200%;
+      animation: bgMove 20s ease infinite;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
 
-    .q{font-size:18px;margin:14px 0}
-    .options{display:grid;gap:10px}
-    .option{background:rgba(255,255,255,.02);padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,.02);cursor:pointer;display:flex;align-items:center;gap:10px}
-    .option:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(2,6,23,.5)}
-    .option input{transform:scale(1.1)}
+    @keyframes bgMove {
+      0% {
+        background-position: 0% 50%;
+      }
 
-    .controls{display:flex;justify-content:space-between;align-items:center;margin-top:16px;gap:12px}
-    .btn{background:transparent;border:1px solid rgba(255,255,255,.06);padding:10px 14px;border-radius:10px;color:var(--accent);cursor:pointer}
-    .btn.primary{background:linear-gradient(90deg,var(--accent),#60a5fa);color:#051025;border:none}
-    .small{font-size:13px;color:var(--muted)}
+      50% {
+        background-position: 100% 50%;
+      }
 
-    .result{display:none;flex-direction:column;gap:12px;align-items:center;text-align:center}
-    .score{font-size:36px;font-weight:700;color:var(--accent)}
-    .breakdown{width:100%;display:grid;grid-template-columns:1fr 1fr;gap:10px}
-    .card-mini{background:rgba(255,255,255,.02);padding:10px;border-radius:8px}
+      100% {
+        background-position: 0% 50%;
+      }
+    }
 
-    footer{margin-top:12px;color:var(--muted);font-size:13px;text-align:center}
+    .wrap {
+      width: 100%;
+      max-width: 900px;
+      animation: fadeIn 1s ease forwards;
+    }
 
-    @media (max-width:620px){.breakdown{grid-template-columns:1fr}.logo{width:52px;height:52px}.q{font-size:16px}}
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* --- Header --- */
+    header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+
+    .logo {
+      width: 64px;
+      height: 64px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-alt));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 20px;
+      color: #051025;
+      box-shadow: 0 6px 30px rgba(0, 0, 0, .5),
+        0 0 20px var(--accent-alt),
+        0 0 40px var(--accent);
+      animation: pulse 3s infinite ease-in-out;
+    }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        box-shadow: 0 0 15px var(--accent);
+      }
+
+      50% {
+        box-shadow: 0 0 25px var(--accent-alt);
+      }
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 24px;
+      background: linear-gradient(90deg, var(--accent), var(--accent-alt));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    p.lead {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    /* --- Card --- */
+    .card {
+      background: linear-gradient(180deg, rgba(255, 255, 255, .04), rgba(255, 255, 255, .01));
+      padding: 24px;
+      border-radius: 16px;
+      box-shadow: 0 10px 40px rgba(2, 6, 23, .6);
+      border: 1px solid rgba(255, 255, 255, .06);
+      transition: transform .3s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+    }
+
+    /* --- Question meta --- */
+    .question-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .progress {
+      height: 10px;
+      flex: 1;
+      margin-left: 12px;
+      background: rgba(255, 255, 255, .08);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .progress>i {
+      display: block;
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--accent), var(--accent-alt));
+      transition: width .5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* --- Question --- */
+    .q {
+      font-size: 18px;
+      margin: 16px 0;
+      line-height: 1.4;
+    }
+
+    /* --- Options --- */
+    .options {
+      display: grid;
+      gap: 12px;
+    }
+
+    .option {
+      background: rgba(255, 255, 255, .03);
+      padding: 12px 14px;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, .05);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: all .3s ease;
+    }
+
+    .option:hover {
+      transform: translateY(-2px) scale(1.02);
+      box-shadow: 0 6px 20px rgba(2, 6, 23, .6),
+        0 0 12px var(--accent-alt);
+      border-color: var(--accent-alt);
+    }
+
+    .option input {
+      transform: scale(1.15);
+    }
+
+    /* --- Controls --- */
+    .controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 18px;
+      gap: 12px;
+    }
+
+    .btn {
+      background: transparent;
+      border: 1px solid rgba(255, 255, 255, .1);
+      padding: 10px 16px;
+      border-radius: 10px;
+      color: var(--accent);
+      cursor: pointer;
+      font-size: 14px;
+      transition: all .25s ease;
+    }
+
+    .btn:hover {
+      border-color: var(--accent);
+      transform: translateY(-2px);
+      box-shadow: 0 0 12px var(--accent);
+    }
+
+    .btn.primary {
+      background: linear-gradient(270deg, var(--accent), var(--accent-alt), var(--accent));
+      background-size: 200% 200%;
+      animation: gradientMove 6s ease infinite;
+      color: #051025;
+      border: none;
+      font-weight: 600;
+      box-shadow: 0 0 15px var(--accent-alt);
+    }
+
+    @keyframes gradientMove {
+      0% {
+        background-position: 0% 50%;
+      }
+
+      50% {
+        background-position: 100% 50%;
+      }
+
+      100% {
+        background-position: 0% 50%;
+      }
+    }
+
+    .small {
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    /* --- Results --- */
+    .result {
+      display: none;
+      flex-direction: column;
+      gap: 14px;
+      align-items: center;
+      text-align: center;
+    }
+
+    .score {
+      font-size: 40px;
+      font-weight: 700;
+      color: var(--accent);
+      text-shadow: 0 0 15px var(--accent-alt);
+    }
+
+    .breakdown {
+      width: 100%;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .card-mini {
+      background: rgba(255, 255, 255, .04);
+      padding: 12px;
+      border-radius: 10px;
+      border: 1px solid rgba(255, 255, 255, .06);
+      transition: transform .2s ease;
+    }
+
+    .card-mini:hover {
+      transform: translateY(-3px);
+    }
+
+    /* --- Footer --- */
+    footer {
+      margin-top: 16px;
+      color: var(--muted);
+      font-size: 13px;
+      text-align: center;
+    }
+
+    /* --- Responsive --- */
+    @media (max-width: 620px) {
+      .breakdown {
+        grid-template-columns: 1fr;
+      }
+
+      .logo {
+        width: 54px;
+        height: 54px;
+      }
+
+      .q {
+        font-size: 16px;
+      }
+    }
   </style>
+
 </head>
+
 <body>
   <div class="wrap">
     <header>
@@ -53,7 +320,7 @@
 
     <div class="card" id="app">
       <div class="question-meta">
-        <div class="small">Question <strong id="qIndex">1</strong>/20</div>
+        <div class="small">Question <strong id="qIndex">1</strong>/60</div>
         <div style="display:flex;align-items:center;gap:8px">
           <div class="small">Score: <span id="score">0</span></div>
           <div class="progress" aria-hidden="true"><i id="progressBar"></i></div>
@@ -74,7 +341,7 @@
       </div>
 
       <div class="result" id="resultBox">
-        <div class="score" id="finalScore">0 / 20</div>
+        <div class="score" id="finalScore">0 / 60</div>
         <div class="breakdown">
           <div class="card-mini">✅ Corrects: <strong id="correctCount">0</strong></div>
           <div class="card-mini">❌ Incorrects: <strong id="wrongCount">0</strong></div>
@@ -95,26 +362,67 @@
 
   <script>
     const quiz = [
-      {q: "1) Qu'est-ce que le HTML ?", options: ["Un langage de style", "Un langage de balisage", "Un langage de programmation", "Un framework JavaScript"], answer:1, explain: "HTML = HyperText Markup Language, structure le contenu d'une page web."},
-      {q: "2) Quel est le rôle du CSS ?", options: ["Gérer la logique côté serveur", "Styliser la présentation d'une page web", "Stocker des données", "Optimiser la base de données"], answer:1, explain: "CSS s'occupe des couleurs, mise en page, typographie..."},
-      {q: "3) Lequel n'est pas un type de boucle en JavaScript ?", options: ["for", "while", "loop", "do...while"], answer:2, explain: "Il n'y a pas de boucle native appelée 'loop' en JS."},
-      {q: "4) Qu'est-ce qu'une fonction pure ?", options: ["Qui utilise le DOM","Qui n'a pas d'effets secondaires et retourne toujours la même sortie pour la même entrée","Qui modifie une variable globale","Qui fait des requêtes réseau"], answer:1, explain: "Les fonctions pures dépendent seulement de leurs arguments et ne modifient rien à l'extérieur."},
-      {q: "5) Que signifie O(n) ?", options: ["Complexité constante","Complexité linéaire","Complexité quadratique","Complexité logarithmique"], answer:1, explain: "O(n) : le temps croît linéairement avec la taille n."},
-      {q: "6) Git : quelle commande récupère les commits distants sans les fusionner ?", options: ["git pull","git clone","git fetch","git merge"], answer:2, explain: "git fetch télécharge les données distantes; git pull fait fetch + merge."},
-      {q: "7) REST est :", options: ["Un protocole réseau bas-niveau","Un style architectural pour APIs","Un langage de programmation","Une base de données"], answer:1, explain: "REST définit des conventions pour construire des APIs HTTP."},
-      {q: "8) Quel header HTTP est utilisé pour indiquer le type de contenu ?", options: ["Authorization","Content-Type","Accept-Language","Cache-Control"], answer:1, explain: "Content-Type indique 'application/json', 'text/html', etc."},
-      {q: "9) SQL injection : c'est quoi ?", options: ["Un test de performance SQL","Une attaque qui injecte du SQL malveillant","Un pattern de design","Un type d'index"], answer:1, explain: "L'attaque insère du SQL via des entrées non-sanitized."},
-      {q: "10) Qu'est-ce qu'une closure en JavaScript ?", options: ["Une variable globale","Une fonction qui rappelle une autre fonction","Une fonction qui garde l'accès à son scope même après exécution","Un type d'objet"], answer:2, explain: "Une closure capture son environnement lexical."},
-      {q: "11) Quelle est la différence principale entre let et var en JS ?", options: ["let est bloqué par le scope de bloc, var non","var est asynchrone","let crée des variables globales","var n'existe pas en ES5"], answer:0, explain: "let respecte le scope de bloc { }, var est function-scoped."},
-      {q: "12) Quel est l'intérêt d'un index en base de données ?", options: ["Augmenter la taille de la DB","Accélérer les recherches","Supprimer les lignes dupliquées","Crypter les données"], answer:1, explain: "Les index accélèrent les SELECT mais ralentissent parfois INSERT/UPDATE."},
-      {q: "13) Quel pattern est utilisé pour séparer interface et implémentation (ex : controller/view) ?", options: ["Singleton","Factory","MVC","Observer"], answer:2, explain: "MVC = Model-View-Controller sépare logique / interface / données."},
-      {q: "14) Que fait 'async/await' en JS ?", options: ["Rend une fonction synchrone","Permet d'écrire du code asynchrone façon synchrone","Crée des threads","Bloque l'UI"], answer:1, explain: "async/await facilite la lecture du code asynchrone basé sur Promises."},
-      {q: "15) Test unitaire = ?", options: ["Test global du produit","Test d'une petite unité de code (fonction, module)","Test d'intégration réseau","Test de charge"], answer:1, explain: "Les tests unitaires vérifient des fonctions/méthodes isolées."},
-      {q: "16) Qu'est-ce qu'un endpoint API idempotent ?", options: ["Ne modifie jamais rien","Produit le même effet peu importe le nombre de requêtes","Est toujours sécurisé","Retourne toujours 200"], answer:1, explain: "Idempotent = répéter la même demande donne le même résultat d'état."},
-      {q: "17) Qu'est-ce que le DOM ?", options: ["Document Object Model","Distributed Object Manager","Data Oriented Module","Dynamic Onload Manager"], answer:0, explain: "DOM représente la structure HTML en objets manipulables par JS."},
-      {q: "18) Quel est l'algorithme de tri moyen le plus utilisé pour son équilibre simplicité/perf ?", options: ["Bubble sort","Selection sort","QuickSort","Bogosort"], answer:2, explain: "QuickSort est souvent très rapide en pratique (pivot choisi correctement)."},
-      {q: "19) Que fait CORS ?", options: ["Autorise ou bloque les requêtes cross-origin côté navigateur","Chiffre les données","Gère l'authentification","Compresse les réponses HTTP"], answer:0, explain: "CORS est un mécanisme de sécurité du navigateur contrôlant l'accès cross-origin."},
-      {q: "20) Quelle est la meilleure pratique pour stocker des mots de passe ?", options: ["En clair dans la DB","Hash + salt (ex: bcrypt)","Dans un fichier texte","Base64 encoding"], answer:1, explain: "Toujours hasher et saler les mots de passe; ne pas stocker en clair."},
+      { q: "1) Qu'est-ce que le HTML ?", options: ["Un langage de style", "Un langage de balisage", "Un langage de programmation", "Un framework JavaScript"], answer: 1, explain: "HTML = HyperText Markup Language, structure le contenu d'une page web." },
+      { q: "2) Quel est le rôle du CSS ?", options: ["Gérer la logique côté serveur", "Styliser la présentation d'une page web", "Stocker des données", "Optimiser la base de données"], answer: 1, explain: "CSS s'occupe des couleurs, mise en page, typographie..." },
+      { q: "3) Lequel n'est pas un type de boucle en JavaScript ?", options: ["for", "while", "loop", "do...while"], answer: 2, explain: "Il n'y a pas de boucle native appelée 'loop' en JS." },
+      { q: "4) Qu'est-ce qu'une fonction pure ?", options: ["Qui utilise le DOM", "Qui n'a pas d'effets secondaires et retourne toujours la même sortie pour la même entrée", "Qui modifie une variable globale", "Qui fait des requêtes réseau"], answer: 1, explain: "Les fonctions pures dépendent seulement de leurs arguments et ne modifient rien à l'extérieur." },
+      { q: "5) Que signifie O(n) ?", options: ["Complexité constante", "Complexité linéaire", "Complexité quadratique", "Complexité logarithmique"], answer: 1, explain: "O(n) : le temps croît linéairement avec la taille n." },
+      { q: "6) Git : quelle commande récupère les commits distants sans les fusionner ?", options: ["git pull", "git clone", "git fetch", "git merge"], answer: 2, explain: "git fetch télécharge les données distantes; git pull fait fetch + merge." },
+      { q: "7) REST est :", options: ["Un protocole réseau bas-niveau", "Un style architectural pour APIs", "Un langage de programmation", "Une base de données"], answer: 1, explain: "REST définit des conventions pour construire des APIs HTTP." },
+      { q: "8) Quel header HTTP est utilisé pour indiquer le type de contenu ?", options: ["Authorization", "Content-Type", "Accept-Language", "Cache-Control"], answer: 1, explain: "Content-Type indique 'application/json', 'text/html', etc." },
+      { q: "9) SQL injection : c'est quoi ?", options: ["Un test de performance SQL", "Une attaque qui injecte du SQL malveillant", "Un pattern de design", "Un type d'index"], answer: 1, explain: "L'attaque insère du SQL via des entrées non-sanitized." },
+      { q: "10) Qu'est-ce qu'une closure en JavaScript ?", options: ["Une variable globale", "Une fonction qui rappelle une autre fonction", "Une fonction qui garde l'accès à son scope même après exécution", "Un type d'objet"], answer: 2, explain: "Une closure capture son environnement lexical." },
+      { q: "11) Quelle est la différence principale entre let et var en JS ?", options: ["let est bloqué par le scope de bloc, var non", "var est asynchrone", "let crée des variables globales", "var n'existe pas en ES5"], answer: 0, explain: "let respecte le scope de bloc { }, var est function-scoped." },
+      { q: "12) Quel est l'intérêt d'un index en base de données ?", options: ["Augmenter la taille de la DB", "Accélérer les recherches", "Supprimer les lignes dupliquées", "Crypter les données"], answer: 1, explain: "Les index accélèrent les SELECT mais ralentissent parfois INSERT/UPDATE." },
+      { q: "13) Quel pattern est utilisé pour séparer interface et implémentation (ex : controller/view) ?", options: ["Singleton", "Factory", "MVC", "Observer"], answer: 2, explain: "MVC = Model-View-Controller sépare logique / interface / données." },
+      { q: "14) Que fait 'async/await' en JS ?", options: ["Rend une fonction synchrone", "Permet d'écrire du code asynchrone façon synchrone", "Crée des threads", "Bloque l'UI"], answer: 1, explain: "async/await facilite la lecture du code asynchrone basé sur Promises." },
+      { q: "15) Test unitaire = ?", options: ["Test global du produit", "Test d'une petite unité de code (fonction, module)", "Test d'intégration réseau", "Test de charge"], answer: 1, explain: "Les tests unitaires vérifient des fonctions/méthodes isolées." },
+      { q: "16) Qu'est-ce qu'un endpoint API idempotent ?", options: ["Ne modifie jamais rien", "Produit le même effet peu importe le nombre de requêtes", "Est toujours sécurisé", "Retourne toujours 200"], answer: 1, explain: "Idempotent = répéter la même demande donne le même résultat d'état." },
+      { q: "17) Qu'est-ce que le DOM ?", options: ["Document Object Model", "Distributed Object Manager", "Data Oriented Module", "Dynamic Onload Manager"], answer: 0, explain: "DOM représente la structure HTML en objets manipulables par JS." },
+      { q: "18) Quel est l'algorithme de tri moyen le plus utilisé pour son équilibre simplicité/perf ?", options: ["Bubble sort", "Selection sort", "QuickSort", "Bogosort"], answer: 2, explain: "QuickSort est souvent très rapide en pratique (pivot choisi correctement)." },
+      { q: "19) Que fait CORS ?", options: ["Autorise ou bloque les requêtes cross-origin côté navigateur", "Chiffre les données", "Gère l'authentification", "Compresse les réponses HTTP"], answer: 0, explain: "CORS est un mécanisme de sécurité du navigateur contrôlant l'accès cross-origin." },
+      { q: "20) Quelle est la meilleure pratique pour stocker des mots de passe ?", options: ["En clair dans la DB", "Hash + salt (ex: bcrypt)", "Dans un fichier texte", "Base64 encoding"], answer: 1, explain: "Toujours hasher et saler les mots de passe; ne pas stocker en clair." },
+      { q: "21) Quelle balise HTML est utilisée pour inclure du JavaScript ?", options: ["<style>", "<js>", "<script>", "<code>"], answer: 2, explain: "La balise <script> permet d'inclure ou d'écrire du JavaScript dans une page HTML." },
+      { q: "22) Que signifie JSON ?", options: ["Java Source Object Notation", "JavaScript Object Notation", "Java Syntax Over Network", "Joined Syntax Of Nodes"], answer: 1, explain: "JSON = JavaScript Object Notation, format léger d’échange de données." },
+      { q: "23) Que fait 'npm install' ?", options: ["Lance le serveur Node", "Installe les dépendances du projet", "Compile le code", "Crée un repo Git"], answer: 1, explain: "npm install installe les packages listés dans package.json." },
+      { q: "24) Que signifie HTTP ?", options: ["HyperText Transfer Protocol", "High Transfer Text Protocol", "Hyper Tool Transfer Process", "Host Transfer Protocol"], answer: 0, explain: "HTTP = HyperText Transfer Protocol, utilisé pour le web." },
+      { q: "25) Quelle méthode SQL ajoute une nouvelle ligne dans une table ?", options: ["INSERT INTO", "ADD NEW", "CREATE ROW", "UPDATE"], answer: 0, explain: "INSERT INTO permet d’ajouter une ligne dans une table SQL." },
+      { q: "26) Que fait la commande 'git status' ?", options: ["Montre les fichiers modifiés/en attente", "Supprime un commit", "Télécharge les fichiers distants", "Lance le serveur"], answer: 0, explain: "git status montre les fichiers modifiés, staged, ou non suivis." },
+      { q: "27) En programmation, que fait l’opérateur modulo (%) ?", options: ["Renvoie la division entière", "Renvoie le reste d'une division", "Renvoie le carré d'un nombre", "Renvoie l’arrondi"], answer: 1, explain: "Modulo donne le reste d’une division entière." },
+      { q: "28) Qu’est-ce qu’un framework ?", options: ["Un langage", "Une librairie graphique", "Un ensemble d’outils structurants pour développer", "Un IDE"], answer: 2, explain: "Un framework fournit une structure et des conventions pour développer." },
+      { q: "29) Quelle est la différence entre HTTP et HTTPS ?", options: ["Aucune", "HTTPS chiffre les échanges", "HTTPS est plus rapide", "HTTP est pour les mobiles"], answer: 1, explain: "HTTPS = HTTP sécurisé avec chiffrement SSL/TLS." },
+      { q: "30) En CSS, que signifie 'em' ?", options: ["Unité relative à la taille de la police parent", "Unité fixe de 10px", "Unité basée sur le viewport", "Unité absolue"], answer: 0, explain: "1em = taille de la police de l’élément parent." },
+      { q: "31) Quelle commande MySQL permet de supprimer une table ?", options: ["DELETE TABLE", "REMOVE", "DROP TABLE", "TRUNCATE"], answer: 2, explain: "DROP TABLE supprime complètement la table et ses données." },
+      { q: "32) Quelle est la valeur par défaut de 'flex-direction' en CSS Flexbox ?", options: ["row", "column", "row-reverse", "inherit"], answer: 0, explain: "Par défaut, flex-direction est 'row' (alignement horizontal)." },
+      { q: "33) Que signifie API ?", options: ["Application Process Integration", "Advanced Program Interface", "Application Programming Interface", "Applied Protocol Instance"], answer: 2, explain: "API = Application Programming Interface, permet d’interagir avec un service." },
+      { q: "34) En JavaScript, que renvoie typeof null ?", options: ["'null'", "'undefined'", "'object'", "'number'"], answer: 2, explain: "typeof null renvoie 'object' (bug historique de JS)." },
+      { q: "35) Que fait 'console.log()' ?", options: ["Affiche dans l’UI", "Affiche dans la console développeur", "Affiche dans le backend", "Envoie une alerte"], answer: 1, explain: "console.log affiche des infos dans la console du navigateur." },
+      { q: "36) Quelle propriété CSS arrondit les angles ?", options: ["border", "padding", "border-radius", "box-shadow"], answer: 2, explain: "border-radius permet de faire des coins arrondis." },
+      { q: "37) Quel est l’intérêt des promesses (Promises) en JS ?", options: ["Accélérer le code", "Gérer l’asynchrone plus facilement", "Créer des threads", "Améliorer le CSS"], answer: 1, explain: "Les Promises simplifient la gestion des opérations asynchrones." },
+      { q: "38) Que fait 'SELECT * FROM users;' en SQL ?", options: ["Sélectionne une colonne", "Supprime la table", "Sélectionne toutes les colonnes de la table users", "Crée un index"], answer: 2, explain: "SELECT * récupère toutes les colonnes de la table." },
+      { q: "39) Quelle commande supprime un fichier avec Git ?", options: ["git remove", "git rm", "git delete", "git erase"], answer: 1, explain: "git rm supprime un fichier de l’index et du repo." },
+      { q: "40) Qu’est-ce qu’un IDE ?", options: ["Un compilateur", "Un environnement de développement intégré", "Un langage de programmation", "Un protocole"], answer: 1, explain: "IDE = Integrated Development Environment (ex : VS Code, IntelliJ)." },
+      { q: "41) En CSS, que fait 'position: absolute;' ?", options: ["Place l’élément selon le flux normal", "Place l’élément par rapport à son parent positionné", "Le fixe à l’écran", "Le cache"], answer: 1, explain: "absolute se positionne par rapport au parent le plus proche en positionné." },
+      { q: "42) Quelle balise HTML définit un lien hypertexte ?", options: ["<a>", "<link>", "<href>", "<url>"], answer: 0, explain: "La balise <a> sert à créer des liens." },
+      { q: "43) En Node.js, que fait 'require()' ?", options: ["Importe un module", "Crée une variable", "Supprime un fichier", "Compile du JS"], answer: 0, explain: "require() sert à importer un module dans Node.js." },
+      { q: "44) Qu’est-ce qu’un cookie web ?", options: ["Une base de données locale", "Un fichier stockant de petites données côté client", "Un script malveillant", "Un plugin"], answer: 1, explain: "Un cookie stocke des infos (session, préférences) côté client." },
+      { q: "45) Quelle méthode JavaScript permet de transformer un JSON en objet ?", options: ["JSON.decode()", "JSON.parse()", "JSON.stringify()", "JSON.toObject()"], answer: 1, explain: "JSON.parse() convertit une chaîne JSON en objet JS." },
+      { q: "46) Qu’est-ce que le responsive design ?", options: ["Adapter une page à plusieurs tailles d’écrans", "Rendre le site plus rapide", "Améliorer le SEO", "Supprimer les images"], answer: 0, explain: "Le responsive adapte le design selon mobile/tablette/PC." },
+      { q: "47) En JavaScript, que fait 'setInterval()' ?", options: ["Exécute une fonction une seule fois", "Exécute une fonction régulièrement à intervalle défini", "Supprime une fonction", "Pause le script"], answer: 1, explain: "setInterval exécute une fonction toutes les X ms." },
+      { q: "48) Qu’est-ce que le Big-O ?", options: ["Notation de complexité algorithmique", "Notation de base de données", "Type de variable", "Protocole réseau"], answer: 0, explain: "Big-O mesure la complexité en temps/espace d’un algo." },
+      { q: "49) En SQL, que fait 'JOIN' ?", options: ["Fusionne deux tables selon une condition", "Ajoute une ligne", "Supprime une colonne", "Trie les résultats"], answer: 0, explain: "JOIN combine des données de plusieurs tables selon une relation." },
+      { q: "50) Quelle méthode JS convertit un tableau en chaîne ?", options: ["toString()", "array.join()", "concat()", "stringify()"], answer: 1, explain: "join() permet de créer une chaîne à partir des éléments d’un tableau." },
+      { q: "51) Que fait 'npm init' ?", options: ["Installe Node.js", "Crée un nouveau projet Node et un package.json", "Lance un script", "Met à jour npm"], answer: 1, explain: "npm init initialise un projet avec package.json." },
+      { q: "52) Quelle est la différence entre HTTP GET et POST ?", options: ["Aucune", "GET envoie dans l’URL, POST dans le body", "POST est plus rapide", "GET chiffre automatiquement"], answer: 1, explain: "GET = paramètres dans l’URL, POST = paramètres dans le body." },
+      { q: "53) Quelle commande Linux liste les fichiers ?", options: ["cd", "ls", "pwd", "rm"], answer: 1, explain: "ls affiche les fichiers dans le répertoire courant." },
+      { q: "54) Que fait 'const' en JS ?", options: ["Crée une variable constante", "Crée une variable globale", "Crée une fonction", "Définit un objet"], answer: 0, explain: "const crée une variable qui ne peut pas être réaffectée." },
+      { q: "55) Quelle est la différence entre frontend et backend ?", options: ["Frontend = client, Backend = serveur", "Frontend = serveur, Backend = client", "Les deux sont identiques", "Backend = base de données uniquement"], answer: 0, explain: "Frontend gère l’affichage côté client, backend la logique côté serveur." },
+      { q: "56) Qu’est-ce qu’un serveur proxy ?", options: ["Un cache entre client et serveur", "Un langage de programmation", "Un protocole web", "Une BDD"], answer: 0, explain: "Un proxy agit comme intermédiaire entre client et serveur." },
+      { q: "57) En HTML5, quelle balise définit une section indépendante ?", options: ["<div>", "<span>", "<section>", "<article>"], answer: 2, explain: "<section> définit une partie autonome du contenu." },
+      { q: "58) Quelle méthode supprime le dernier élément d’un tableau JS ?", options: ["pop()", "shift()", "splice()", "remove()"], answer: 0, explain: "pop() enlève le dernier élément d’un tableau." },
+      { q: "59) Que fait 'try...catch' en JS ?", options: ["Boucle sur les erreurs", "Gère les exceptions", "Crée un test unitaire", "Supprime les erreurs"], answer: 1, explain: "try...catch permet de capturer et gérer les erreurs." },
+      { q: "60) Quelle est la fonction principale de DNS ?", options: ["Stocker des mails", "Traduire des noms de domaine en adresses IP", "Sécuriser HTTP", "Héberger un site"], answer: 1, explain: "Le DNS fait la correspondance entre noms de domaine et adresses IP." },
+
     ];
 
     // State
@@ -138,111 +446,111 @@
     const reviewBtn = document.getElementById('reviewBtn');
     const explanationsEl = document.getElementById('explanations');
 
-    function render(){
+    function render() {
       const cur = quiz[index];
-      qIndexEl.textContent = index+1;
+      qIndexEl.textContent = index + 1;
       questionText.textContent = cur.q;
       optionsEl.innerHTML = '';
-      cur.options.forEach((opt,i)=>{
+      cur.options.forEach((opt, i) => {
         const div = document.createElement('label');
         div.className = 'option';
-        div.innerHTML = `<input type="radio" name="opt" value="${i}" ${answers[index]===i? 'checked' : ''}/> <span>${opt}</span>`;
-        div.onclick = ()=> select(i);
+        div.innerHTML = `<input type="radio" name="opt" value="${i}" ${answers[index] === i ? 'checked' : ''}/> <span>${opt}</span>`;
+        div.onclick = () => select(i);
         optionsEl.appendChild(div);
       });
 
-      progressBar.style.width = `${((index)/quiz.length)*100}%`;
-      prevBtn.disabled = index===0;
-      if(index===quiz.length-1){ nextBtn.textContent = 'Terminer ✅'; } else { nextBtn.textContent = 'Suivant ➡️'; }
+      progressBar.style.width = `${((index) / quiz.length) * 100}%`;
+      prevBtn.disabled = index === 0;
+      if (index === quiz.length - 1) { nextBtn.textContent = 'Terminer ✅'; } else { nextBtn.textContent = 'Suivant ➡️'; }
       updateScoreDisplay();
     }
 
-    function select(i){
+    function select(i) {
       // set answer for current q
-      if(answers[index]===null){ // first time selecting
-        answers[index]=i;
-        if(i===quiz[index].answer){ score++; }
+      if (answers[index] === null) { // first time selecting
+        answers[index] = i;
+        if (i === quiz[index].answer) { score++; }
       } else {
         // change answer adjust score
-        if(answers[index]===quiz[index].answer) score--; // previously correct
-        answers[index]=i;
-        if(i===quiz[index].answer) score++;
+        if (answers[index] === quiz[index].answer) score--; // previously correct
+        answers[index] = i;
+        if (i === quiz[index].answer) score++;
       }
       updateScoreDisplay();
       // mark selected radio
       const radios = optionsEl.querySelectorAll('input');
-      radios.forEach(r=> r.checked = r.value==i);
+      radios.forEach(r => r.checked = r.value == i);
       // auto-advance a bit
-      setTimeout(()=>{
+      setTimeout(() => {
         // do nothing; keep user control
-      },120);
+      }, 120);
     }
 
-    function updateScoreDisplay(){ scoreEl.textContent = score; }
+    function updateScoreDisplay() { scoreEl.textContent = score; }
 
-    prevBtn.addEventListener('click',()=>{
-      if(index>0){ index--; render(); }
+    prevBtn.addEventListener('click', () => {
+      if (index > 0) { index--; render(); }
     });
 
-    nextBtn.addEventListener('click',()=>{
-      if(index<quiz.length-1){ index++; render(); }
+    nextBtn.addEventListener('click', () => {
+      if (index < quiz.length - 1) { index++; render(); }
       else finish();
     });
 
-    showAnsBtn.addEventListener('click',()=>{
+    showAnsBtn.addEventListener('click', () => {
       const correct = quiz[index].answer;
       const opts = optionsEl.querySelectorAll('.option');
-      opts.forEach((el,i)=>{
+      opts.forEach((el, i) => {
         el.style.border = '1px solid rgba(255,255,255,.02)';
         el.style.opacity = '0.9';
-        if(i===correct){ el.style.border = '2px solid var(--accent)'; }
-        if(answers[index]===i){ // user choice
-          if(i===correct) el.style.background = 'linear-gradient(90deg, rgba(110,231,183,.08), rgba(96,165,250,.06))';
+        if (i === correct) { el.style.border = '2px solid var(--accent)'; }
+        if (answers[index] === i) { // user choice
+          if (i === correct) el.style.background = 'linear-gradient(90deg, rgba(110,231,183,.08), rgba(96,165,250,.06))';
           else el.style.background = 'linear-gradient(90deg, rgba(255,102,102,.04), rgba(255,102,102,.02))';
         }
       });
     });
 
-    function finish(){
+    function finish() {
       // show result
       resultBox.style.display = 'flex';
       explanationsEl.style.display = 'none';
       finalScore.textContent = `${score} / ${quiz.length}`;
-      const corrects = answers.reduce((acc,a,i)=> acc + (a===quiz[i].answer?1:0),0);
+      const corrects = answers.reduce((acc, a, i) => acc + (a === quiz[i].answer ? 1 : 0), 0);
       correctCountEl.textContent = corrects;
       wrongCountEl.textContent = quiz.length - corrects;
       // save highscore
-      try{ const hs = localStorage.getItem('QuizAppV3_highscore')||0; if(score>Number(hs)) localStorage.setItem('QuizAppV3_highscore',score); }catch(e){}
+      try { const hs = localStorage.getItem('QuizAppV3_highscore') || 0; if (score > Number(hs)) localStorage.setItem('QuizAppV3_highscore', score); } catch (e) { }
       // build explanations
       buildExplanations();
       // scroll to result
-      resultBox.scrollIntoView({behavior:'smooth'});
+      resultBox.scrollIntoView({ behavior: 'smooth' });
     }
 
-    function buildExplanations(){
+    function buildExplanations() {
       explanationsEl.innerHTML = '';
-      quiz.forEach((item,i)=>{
+      quiz.forEach((item, i) => {
         const wrap = document.createElement('div');
         wrap.className = 'card-mini';
         wrap.style.marginTop = '8px';
         const correct = item.answer;
-        const user = answers[i]===null? 'Non répondu' : item.options[answers[i]];
-        wrap.innerHTML = `<strong>Q${i+1}:</strong> ${item.q}<br>
+        const user = answers[i] === null ? 'Non répondu' : item.options[answers[i]];
+        wrap.innerHTML = `<strong>Q${i + 1}:</strong> ${item.q}<br>
           <em>Réponse correcte:</em> ${item.options[correct]}<br>
           <em>Ta réponse:</em> ${user}<br>
           <div style="margin-top:6px;color:var(--muted)">${item.explain}</div>`;
-        wrap.onclick = ()=>{ index = i; resultBox.style.display='none'; render(); window.scrollTo({top:0,behavior:'smooth'}); };
+        wrap.onclick = () => { index = i; resultBox.style.display = 'none'; render(); window.scrollTo({ top: 0, behavior: 'smooth' }); };
         explanationsEl.appendChild(wrap);
       });
     }
 
-    restartBtn.addEventListener('click',()=>{
-      index=0;score=0;answers.fill(null);resultBox.style.display='none';explanationsEl.style.display='none';render();
+    restartBtn.addEventListener('click', () => {
+      index = 0; score = 0; answers.fill(null); resultBox.style.display = 'none'; explanationsEl.style.display = 'none'; render();
     });
 
-    reviewBtn.addEventListener('click',()=>{
+    reviewBtn.addEventListener('click', () => {
       explanationsEl.style.display = 'block';
-      explanationsEl.scrollIntoView({behavior:'smooth'});
+      explanationsEl.scrollIntoView({ behavior: 'smooth' });
     });
 
     // init
@@ -250,4 +558,5 @@
 
   </script>
 </body>
+
 </html>
